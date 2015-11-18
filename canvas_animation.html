@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="en">
+<head>
+ <title>Kaleidoscope!</title>
+ <meta charset="utf-8">
+ <style>
+canvas {
+ border: 1px solid black;;
+}
+</style>
+ <script>
+ var canvas;
+ var context;
+ var particles;
+ var timer;
+ var timer2;
+ function makeParticles() {
+	//create an array of particles for our animation
+	particles = [];
+	for(var i = 0; i < 15; i++)
+	{
+		particles.push(new Particle());
+	}
+ }
+ function degreesToRadians(degrees) {
+	 //converts from degrees to radians and returns
+	 return (degrees * Math.PI)/180;
+ }
+ function Particle()
+ {
+	 //the constructor for a single particle, with random starting x+y, velocity, color, and radius
+	 this.x = Math.random()*canvas.width;
+	 this.y = Math.random()*canvas.height;
+	 this.vx = Math.random()*10-5;
+	 this.vy = Math.random()*10-5;
+	 var colors = ["rgb(128,0,0)","gray"];
+	 this.color = colors[Math.floor(Math.random()*colors.length)];
+	 //this.radius = Math.floor((Math.random()*15)+5);
+	 this.radius=15;
+ }
+ function moveParticles() {
+	 //partially clear the screen to fade previous circles, and draw a new particle at each new coordinate
+	 context.globalCompositeOperation = "lighter";
+	 context.fillStyle = "rgba(0, 0, 0, 0.3)";
+	 context.fillRect(0, 0, canvas.width, canvas.height);
+	 context.globalCompositeOperation = "lighter";
+	 for(var i = 0; i < particles.length; i++)
+	 {
+		 var p = particles[i];
+		 context.beginPath();
+		 context.arc(p.x, p.y, p.radius, 0, degreesToRadians(360), true);
+		 context.fillStyle = p.color;
+		 context.fill();
+		 p.x += p.vx;
+		 p.y += p.vy;
+		 if(p.x < -50) p.x = canvas.width+50;
+		 if(p.y < -50) p.y = canvas.height+50;
+		 if(p.x > canvas.width+50) p.x = -50;
+		 if(p.y > canvas.height+50) p.y = -50;
+	 }
+ }
+ 
+  function makeSquares() {
+	//create an array of particles for our animation
+	squares = [];
+	for(var i = 0; i < 2; i++)
+	{
+		squares.push(new Square());
+	}
+ }
+ function Square()
+ {
+	 //the constructor for a single particle, with random starting x+y, velocity, color, and radius
+	 this.x = canvas.width;
+	 this.y = canvas.height;
+	 this.vx = Math.random()*10-5;
+	 this.vy = Math.random()*10-4;
+	 var colors = ["white"];
+	 this.color = colors[Math.floor(Math.random()*colors.length)];
+	 //this.radius = 1;
+ }
+ function moveSquares() {
+	 //partially clear the screen to fade previous circles, and draw a new particle at each new coordinate
+	 context.globalCompositeOperation = "source-out";
+	 context.globalAlpha = 0.25;
+	 context.fillStyle = "rgba(0, 0, 0, 0.3)";
+	 //context.stroke();
+	 //context.fillRect(0, 0, canvas.width, canvas.height);
+	 context.globalCompositeOperation = "lighter";
+	 for(var i = 0; i < squares.length; i++)
+	 {
+	var s = squares[i];
+	context.beginPath();
+	context.rect(s.x,s.y,s.x,s.y)
+	context.fillStyle = s.color;
+	context.fill();
+		 s.x += s.vx;
+		 s.y += s.vy;
+		 if(s.x < -50) p.x = canvas.width+50;
+		 if(s.y < -50) p.y = canvas.height+50;
+		 if(s.x > canvas.width+50) s.x = -50;
+		 if(s.y > canvas.height+50) s.y = -50;
+	 }
+ }
+ 
+  function makeSweeper() {
+	//create an array of particles for our animation
+	sweeper = [];
+	for(var i = 0; i <1; i++)
+	{
+		sweeper.push(new Sweeper());
+	}
+ }
+ function degreesToRadians(degrees) {
+	 //converts from degrees to radians and returns
+	 return (degrees * Math.PI)/180;
+ }
+ function Sweeper()
+ {
+	 //the constructor for a single particle, with random starting x+y, velocity, color, and radius
+	 this.x = Math.random()*canvas.width;
+	 this.y = Math.random()*canvas.height;
+	 this.vx = Math.random()*10-5;
+	 this.vy = Math.random()*10-5;
+	 var colors = ["black"];
+	 this.color = colors[Math.floor(Math.random()*colors.length)];
+	 this.radius = 15;
+ }
+ function moveSweeper() {
+	 //partially clear the screen to fade previous circles, and draw a new particle at each new coordinate
+	 context.globalCompositeOperation = "source-over";
+	 context.fillStyle = "rgba(0, 0, 0, 0.3)";
+	 context.fillRect(0, 0, canvas.width, canvas.height);
+	 context.globalCompositeOperation = "lighter";
+	 for(var i = 0; i < sweeper.length; i++)
+	 {
+		 var w = sweeper[i];
+		 context.beginPath();
+		 context.rotate(7*Math.PI/180);
+		 context.arc(w.x, w.y, w.radius, 0, degreesToRadians(360), true);
+		 context.fillStyle = w.color;
+		 context.fill();
+		 w.x += w.vx;
+		 w.y += w.vy;
+		 if(w.x < -50) w.x = canvas.width+50;
+		 if(w.y < -50) w.y = canvas.height+50;
+		 if(w.x > canvas.width+50) w.x = -50;
+		 if(w.y > canvas.height+50) w.y = -50;
+	 }
+ }
+ 
+  function makeTriangles() {
+	triangles = [];
+	for(var i = 0; i < 2; i++)
+	{
+		triangles.push(new Triangle());
+	}
+ }
+ function Triangle()
+ {
+	 this.x = canvas.width;
+	 this.y = canvas.height;
+	 this.tx = Math.random()*10-5;
+	 this.ty = Math.random()*10-4;
+	 var colors = ["yellow","orange","cyan"];
+	 this.color = colors[Math.floor(Math.random()*colors.length)];
+ }
+ function moveTriangles() {
+
+	 context.globalCompositeOperation = "source-out";
+	 context.globalAlpha = 0.25;
+	 context.fillStyle = "rgba(0, 0, 0, 0.3)";
+	 context.globalCompositeOperation = "lighter";
+	 for(var i = 0; i < triangles.length; i++)
+	 {
+	var t = triangles[i];
+	
+	context.beginPath();
+	context.moveTo(t.x, t.y);
+	context.lineTo(300, t.y);
+	context.lineTo(t.x, 300);
+	context.closePath();
+	//context.rotate(7*Math.PI/180);
+	context.lineWidth = 10;
+	context.strokeStyle = t.color;
+	context.stroke();
+	context.fill();
+		 t.x += t.vx;
+		 t.y += t.vy;
+	 }
+ }
+ 
+ 
+   function makeStars() {
+	stars = [];
+	for(var i = 0; i < 2; i++)
+	{
+		stars.push(new Star());
+	}
+ }
+ function Star()
+ {
+	 this.x = canvas.width;
+	 this.y = canvas.height;
+	 this.vx = Math.random()*10-5;
+	 this.vy = Math.random()*10-4;
+	 var colors = ["yellow","orange","red","purple"];
+	 this.color = colors[Math.floor(Math.random()*colors.length)];
+ }
+ function moveStars() {
+
+	 context.globalCompositeOperation = "xor";
+	 context.globalAlpha = 0.25;
+	 context.fillStyle = "rgba(0, 0, 0, 0.3)";
+	 //context.globalCompositeOperation = "lighter";
+	 for(var i = 0; i < stars.length; i++)
+	 {
+	var st = stars[i];
+	
+	context.fillStyle = st.color;
+	context.beginPath();
+	context.moveTo(107, 0);
+	context.lineTo(141, 67);
+	context.lineTo(215, 78);
+	context.lineTo(161, 130);
+	context.lineTo(174, 205);
+	context.lineTo(107, 170);
+	context.lineTo(41, 205);
+	context.lineTo(53, 130);
+	context.lineTo(0, 78);
+	context.lineTo(74, 67);
+	context.lineTo(107, 0);
+	context.lineWidth = Math.floor((Math.random() * 10) + 1);
+	context.closePath();
+	context.stroke();
+
+		 st.x += st.vx;
+		 st.y += st.vy;
+	 }
+ }
+ 
+   function makeBezier() {
+	bezier = [];
+	for(var i = 0; i < 2; i++)
+	{
+		bezier.push(new Bezier());
+	}
+ }
+ function Bezier()
+ {
+	 this.x = canvas.width;
+	 this.y = canvas.height;
+	 this.vx = Math.random()*10-5;
+	 this.vy = Math.random()*10-4;
+	 var colors = ["yellow","orange","red","purple"];
+	 this.color = colors[Math.floor(Math.random()*colors.length)];
+ }
+ function moveBezier() {
+
+	 context.globalCompositeOperation = "source-atop";
+	 //context.globalAlpha = 0.25;
+	 //context.fillStyle = "rgba(0, 0, 0, 0.3)";
+	 context.globalCompositeOperation = "lighter";
+	 for(var i = 0; i < triangles.length; i++)
+	 {
+	var b = bezier[i];
+	
+    context.beginPath();
+      context.moveTo(b.x, b.y);
+      context.bezierCurveTo(250, 150, 242, 120, 239, 100);
+	  context.closePath();
+      context.lineWidth = 1;
+      context.strokeStyle = b.color;
+      context.stroke();
+		 b.x += b.vx;
+		 b.y += b.vy;
+	 }
+ }
+ 
+   function makeText() {
+	text = [];
+	for(var i = 0; i < 1; i++)
+	{
+		text.push(new Text());
+	}
+
+ }
+ function Text(){
+	 this.x = canvas.width;
+	 this.y = canvas.height;
+	 this.vx = Math.random()*10-5;
+	 this.vy = Math.random()*10-4;
+	 var colors = ["white","cyan","orange"];
+	 this.color = colors[Math.floor(Math.random()*colors.length)];
+	 //var words = ["W    H    O    O    S    H","S      P      I      N","#  #  #  #  #  #","(^3^)","^o^", "(◣_◢)"];
+	 var words = ["#       #       #       #       #       #","#    #    #       #    #    #"];
+	 this.words = words[Math.floor(Math.random()*words.length)];
+	 var number = [2,3,4];
+	 this.number = number[Math.floor(Math.random()*number.length)];
+ }
+ function moveText() {
+	 context.globalCompositeOperation = "source-out";
+	 context.globalAlpha = 0.25;
+	 context.fillStyle = "rgba(0, 0, 0, 0.3)";
+	 context.globalCompositeOperation = "lighter";
+	 for(var i = 0; i < text.length; i++)
+	 {
+	var t = text[i];
+    context.font = "30px helvetica";
+    context.fillStyle = t.color;
+    context.textAlign = "center";
+    context.fillText(t.words, canvas.width/t.number, canvas.height/t.number);
+	context.fillText(t.words, canvas.width, canvas.height);
+	 }
+ }
+ 
+
+ window.onload = function() {
+ 	 canvas = document.getElementById('canvas');
+	 context = canvas.getContext('2d');
+	 makeParticles();
+	 timer = setInterval(moveParticles, 50);
+	 makeSquares();
+	 timer = setInterval(moveSquares, 50);
+	 timer2 = setInterval(makeSquares, 4500);
+	 makeSweeper();
+	 timer = setInterval(moveSweeper, 50);
+	 makeTriangles();
+	 timer = setInterval(moveTriangles, 100);
+	 timer2 = setInterval(makeTriangles, 10000);
+	 makeText();
+	 timer = setInterval(moveText, 10);
+	 timer2 = setInterval(makeText, 10000);
+	 makeStars();
+	 timer = setInterval(moveStars, 1);
+	 timer2 = setInterval(makeStars, 100);
+	 makeBezier();
+	 timer = setInterval(moveBezier, 10);
+	 timer2 = setInterval(makeBezier, 10000);
+	 //var button = document.getElementById('TextButton');
+	 //document.getElementById('TextButton');
+     //button.onclick = 
+}
+ 
+function myStopFunction() {
+
+}
+
+</script>
+</head>
+<body>
+	<h1>Sweeping Abstract Kaleidoscope</h1>
+	<canvas id="canvas" width="960" height="540"></canvas>
+	<h4>If you see a pattern you like, right click the canvas and then click 'save image as.' <br><br>
+	
+	Be quick! The picture changes every few seconds!</h4>
+	<input type='button' id='TextButton' value='Click for Swirling Text!'>
+</body>
+</html>
