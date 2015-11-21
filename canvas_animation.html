@@ -5,7 +5,7 @@
  <meta charset="utf-8">
  <style>
 canvas {
- border: 1px solid black;;
+ border: 1px solid black;
 }
 </style>
  <script>
@@ -15,7 +15,6 @@ canvas {
  var timer;
  var timer2;
  function makeParticles() {
-	//create an array of particles for our animation
 	particles = [];
 	for(var i = 0; i < 15; i++)
 	{
@@ -23,23 +22,18 @@ canvas {
 	}
  }
  function degreesToRadians(degrees) {
-	 //converts from degrees to radians and returns
 	 return (degrees * Math.PI)/180;
  }
- function Particle()
- {
-	 //the constructor for a single particle, with random starting x+y, velocity, color, and radius
+ function Particle(){
 	 this.x = Math.random()*canvas.width;
 	 this.y = Math.random()*canvas.height;
 	 this.vx = Math.random()*10-5;
 	 this.vy = Math.random()*10-5;
 	 var colors = ["rgb(128,0,0)","gray"];
 	 this.color = colors[Math.floor(Math.random()*colors.length)];
-	 //this.radius = Math.floor((Math.random()*15)+5);
 	 this.radius=15;
  }
  function moveParticles() {
-	 //partially clear the screen to fade previous circles, and draw a new particle at each new coordinate
 	 context.globalCompositeOperation = "lighter";
 	 context.fillStyle = "rgba(0, 0, 0, 0.3)";
 	 context.fillRect(0, 0, canvas.width, canvas.height);
@@ -61,7 +55,6 @@ canvas {
  }
  
   function makeSquares() {
-	//create an array of particles for our animation
 	squares = [];
 	for(var i = 0; i < 2; i++)
 	{
@@ -70,22 +63,17 @@ canvas {
  }
  function Square()
  {
-	 //the constructor for a single particle, with random starting x+y, velocity, color, and radius
 	 this.x = canvas.width;
 	 this.y = canvas.height;
 	 this.vx = Math.random()*10-5;
 	 this.vy = Math.random()*10-4;
 	 var colors = ["white"];
 	 this.color = colors[Math.floor(Math.random()*colors.length)];
-	 //this.radius = 1;
  }
  function moveSquares() {
-	 //partially clear the screen to fade previous circles, and draw a new particle at each new coordinate
 	 context.globalCompositeOperation = "source-out";
 	 context.globalAlpha = 0.25;
 	 context.fillStyle = "rgba(0, 0, 0, 0.3)";
-	 //context.stroke();
-	 //context.fillRect(0, 0, canvas.width, canvas.height);
 	 context.globalCompositeOperation = "lighter";
 	 for(var i = 0; i < squares.length; i++)
 	 {
@@ -104,20 +92,14 @@ canvas {
  }
  
   function makeSweeper() {
-	//create an array of particles for our animation
 	sweeper = [];
 	for(var i = 0; i <1; i++)
 	{
 		sweeper.push(new Sweeper());
 	}
  }
- function degreesToRadians(degrees) {
-	 //converts from degrees to radians and returns
-	 return (degrees * Math.PI)/180;
- }
- function Sweeper()
- {
-	 //the constructor for a single particle, with random starting x+y, velocity, color, and radius
+
+ function Sweeper(){
 	 this.x = Math.random()*canvas.width;
 	 this.y = Math.random()*canvas.height;
 	 this.vx = Math.random()*10-5;
@@ -127,7 +109,6 @@ canvas {
 	 this.radius = 15;
  }
  function moveSweeper() {
-	 //partially clear the screen to fade previous circles, and draw a new particle at each new coordinate
 	 context.globalCompositeOperation = "source-over";
 	 context.fillStyle = "rgba(0, 0, 0, 0.3)";
 	 context.fillRect(0, 0, canvas.width, canvas.height);
@@ -180,7 +161,6 @@ canvas {
 	context.lineTo(300, t.y);
 	context.lineTo(t.x, 300);
 	context.closePath();
-	//context.rotate(7*Math.PI/180);
 	context.lineWidth = 10;
 	context.strokeStyle = t.color;
 	context.stroke();
@@ -212,7 +192,6 @@ canvas {
 	 context.globalCompositeOperation = "xor";
 	 context.globalAlpha = 0.25;
 	 context.fillStyle = "rgba(0, 0, 0, 0.3)";
-	 //context.globalCompositeOperation = "lighter";
 	 for(var i = 0; i < stars.length; i++)
 	 {
 	var st = stars[i];
@@ -258,8 +237,6 @@ canvas {
  function moveBezier() {
 
 	 context.globalCompositeOperation = "source-atop";
-	 //context.globalAlpha = 0.25;
-	 //context.fillStyle = "rgba(0, 0, 0, 0.3)";
 	 context.globalCompositeOperation = "lighter";
 	 for(var i = 0; i < triangles.length; i++)
 	 {
@@ -292,8 +269,7 @@ canvas {
 	 this.vy = Math.random()*10-4;
 	 var colors = ["white","cyan","orange"];
 	 this.color = colors[Math.floor(Math.random()*colors.length)];
-	 //var words = ["W    H    O    O    S    H","S      P      I      N","#  #  #  #  #  #","(^3^)","^o^", "(◣_◢)"];
-	 var words = ["#       #       #       #       #       #","#    #    #       #    #    #"];
+	 var words = ["#       #       #       #       #       #","#    #    #       #    #    #","(^ _ ^)","^ o ^", "(◣ _ ◢)","W    H    O    O    S    H","S      P      I      N"];
 	 this.words = words[Math.floor(Math.random()*words.length)];
 	 var number = [2,3,4];
 	 this.number = number[Math.floor(Math.random()*number.length)];
@@ -314,8 +290,20 @@ canvas {
 	 }
  }
  
+ function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+		fillBackgroundColor();
+		for (var i=0; i<circles.length; i++) {
+			drawCircle(circles[i]);
+		 }
+      }
+ function fillBackgroundColor() {
+		 context.fillStyle = 'black';
+		 context.fillRect(0, 0, canvas.width, canvas.height);
+	}
 
- window.onload = function() {
+function init () {
  	 canvas = document.getElementById('canvas');
 	 context = canvas.getContext('2d');
 	 makeParticles();
@@ -337,23 +325,20 @@ canvas {
 	 makeBezier();
 	 timer = setInterval(moveBezier, 10);
 	 timer2 = setInterval(makeBezier, 10000);
-	 //var button = document.getElementById('TextButton');
-	 //document.getElementById('TextButton');
-     //button.onclick = 
-}
- 
-function myStopFunction() {
 
+        window.addEventListener('resize', resizeCanvas, false);
+        window.addEventListener('orientationchange', resizeCanvas, false);
+        resizeCanvas();
 }
 
+window.onload = init;
 </script>
 </head>
 <body>
-	<h1>Sweeping Abstract Kaleidoscope</h1>
+	<h1>Sweeping Abstract Kaleidoscope (And Wallpaper Generator)</h1>
 	<canvas id="canvas" width="960" height="540"></canvas>
 	<h4>If you see a pattern you like, right click the canvas and then click 'save image as.' <br><br>
-	
+	You could use it as your very own wallpaper!<br><br>
 	Be quick! The picture changes every few seconds!</h4>
-	<input type='button' id='TextButton' value='Click for Swirling Text!'>
 </body>
 </html>
