@@ -1,14 +1,32 @@
 <!doctype html>
 <html>
 <head>
-<title>Tornado Simulator</title>
+<title>Tornado Madness</title>
+ <meta charset="utf-8">
+ <style type="text/css" media="screen">
+body{ 
+	
+	background-image: url("https://wallpaperscraft.com/image/wood_black-and-white_from_below_trees_gloomy_kroner_fog_silence_60216_2560x1080.jpg");
+	background-image: url("http://theartmad.com/wp-content/uploads/2015/04/Dark-Forest-3.png");
+	background-color: black;
+ }
+canvas {
+}
+  </style>
 <script>
 	  var canvas;
 	  var context;
 	  var shapes = []
 	  var timer;
 	  var timerTwo;
+	  var timerThree;
 	  var possibleShapes = ['arrow','triangle','square','circle','gust','text'];
+	  var started = false;
+	  
+	  var dx = 5;
+      var dy = 5;
+	  var x = 0;
+	  var y = 0;
 	  
 function Shape(x, y, color) {
 		this.x = x;
@@ -30,7 +48,6 @@ function newShape() {
 		var colors = ["white","grey"];
 		var color = colors[Math.floor(Math.random()*colors.length)];
 		shapes.push(new Shape(x, y, color));
-		
 	}
 	  
 function drawCircle(circle) {
@@ -97,13 +114,12 @@ function drawText(text) {
 		context.fillStyle = 'rgb(180,0,0)';
 		context.font = '70px Chiller';
 		context.textAlign = 'center';
-		context.fillText('TORNADO!', text.x, text.y);
+		context.fillText('TORNADOS!', text.x, text.y);
 	}
-
+	
 function resizeCanvas() {
-        canvas.width = window.innerWidth-20;
-        canvas.height = window.innerHeight-20;
-		fillBackgroundColor();
+        canvas.width = window.innerWidth-250;
+        canvas.height = window.innerHeight-400;
 		for (var i=0; i<shapes.length; i++) {
 			if (shapes[i].shape == 'square') {
 				drawSquare(shapes[i]);
@@ -124,6 +140,9 @@ function resizeCanvas() {
 				shapes[i].dy = -shapes[i].dy;
 				shapes[i].x += shapes[i].dx;
 				shapes[i].y += shapes[i].dy;
+		//	if (i>100){
+		//	break;
+		//	}
 		}
 	}
 	  
@@ -132,24 +151,115 @@ function fillBackgroundColor() {
 		 context.fillRect(0, 0, canvas.width, canvas.height);
 	}
 	
+function ev_mousemove (ev) {
+	var x=150; 
+	var y=100;
+	if (ev.layerX || ev.layerX == 0) {
+		x = ev.layerX;
+		y = ev.layerY;
+	} else if (ev.offsetX || ev.offsetX == 0) {
+		x = ev.offsetX;
+		y = ev.offsetY;
+	}
+	if (!started) {
+		context.beginPath();
+		context.moveTo(x, y);
+		started = true;
+	} else {
+		context.lineTo(x, y);
+		context.strokeStyle = "yellow";
+		context.lineWidth = 5;
+		context.shadowColor = 'rgb(255,255,204)';
+		context.shadowBlur = 10;
+		context.shadowOffsetX = 1;
+		context.shadowOffsetY = 1;
+		context.globalCompositeOperation = "source-over";
+		context.stroke();
+		}
+	}
+	
+
+
+function circle(x,y,r) {
+	context.beginPath();
+	context.arc(x, y, r, 0, Math.PI*2, true);
+	context.fill();
+	context.fillStyle = "yellow";
+	context.shadowColor = 'rgb(255,255,204)';
+	context.shadowBlur = 10;
+	context.shadowOffsetX = 1;
+	context.shadowOffsetY = 1;
+}
+
+
+function doKeyDown(evt){
+	switch (evt.keyCode) {
+		case 38:  /* Up arrow was pressed */
+			if (y - dy > 0){
+				y -= dy;
+			}
+			break;
+		case 40:  /* Down arrow was pressed */
+			if (y + dy < canvas.height){
+				y += dy;
+			}
+			break;
+		case 37:  /* Left arrow was pressed */
+			if (x - dx > 0){
+				x -= dx;
+			}
+			break;
+		case 39:  /* Right arrow was pressed */
+			if (x + dx < canvas.width){
+				x += dx;
+			}
+			break;
+	}
+}
+
+function draw() {
+circle(x, y, 10);
+}
+
+
 function init() {
         canvas = document.getElementById('canvas');
         context = canvas.getContext("2d");
- 
+
+		canvas.addEventListener('mousemove', ev_mousemove, false);
+		window.addEventListener('keydown',doKeyDown,true);
+	
         window.addEventListener('resize', resizeCanvas, false);
         window.addEventListener('orientationchange', resizeCanvas, false);
         resizeCanvas();
-		canvas.onclick = function(event) {
-			handleClick(event.clientX, event.clientY);
-		};
+		
 		timer = setInterval(resizeCanvas, 50);
 		timerTwo = setInterval(newShape, 100);
+		timerThree = setInterval(draw, 0);
+		
 	}
 
 	window.onload = init;
+	
 </script>
 </head>
-<body>
-<canvas id='canvas' width=500 height=500></canvas>
+<body style="text-align:center" text="white">
+<i><h1>Interactive HTML5 Canvas: Tornado Madness</h1></i>
+<h3>(WARNING: BRIGHT FLASHING LIGHTS ARE PRESENT)</h3>
+<canvas id='canvas' style="border:1px solid white;" ></canvas><br><br>
+
+<div>Not chaotic enough? Add some weather effects!<br>
+<br>
+<u>INTERACTION CONTROLS:</u><br><br>
+	1. Use the arrow keys to move the flashing ball of electricity located at the top left of the canvas.<br><br>
+	2. Move your cursor across the canvas to attract the electricy to yourself and create lightning that strikes amidst the storm!<br><br>
+	3. The mouse has to be moving to create enough static to form the lightning.<br><br>
+	4. After you absorb enough electricity, hold right click and drag your cursor on the canvas to draw with the lightning! (Like real lightning, it doesn't stay long!)
+	</div>
+<footer text="gray">
+  <i><p>Amanda Wilkes<br>
+  Contact information: <a href="mailto:wilkesamanda@kngihts.ucf.edu">
+  wilkesamanda@kngihts.ucf.edu</a>.</p></i>
+</footer>
 </body>	  
 </html>
